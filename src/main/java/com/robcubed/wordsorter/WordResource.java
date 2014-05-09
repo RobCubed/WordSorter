@@ -14,11 +14,14 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.skife.jdbi.v2.DBI;
+
+import com.sun.jersey.api.client.WebResource;
 
 
 @Path("/words")
@@ -33,9 +36,9 @@ public class WordResource {
 	}
 	
 	@GET
-	@Path("/{id}")
-	public Response getWord(@PathParam("id") int id) {
-		Word word = wordDao.getWordById(id);
+	@Path("/{word}")
+	public Response getWord(@PathParam("word") String wordSearch) {
+		Word word = wordDao.getWordByWord(wordSearch);
 		return Response.ok(word).build();
 	}
 	
@@ -53,6 +56,4 @@ public class WordResource {
 			return Response.created(new URI(String.valueOf(newWordId))).build();			
 		}
 	}
-	
-	
 }

@@ -13,4 +13,9 @@ public interface WordDAO {
 	@GetGeneratedKeys
 	@SqlUpdate("insert into word (id, word) values (NULL, :word) on duplicate key update timesUsed = timesUsed + 1")
 	int createWord(@Bind("word") String word);
+
+	@Mapper(WordMapper.class)
+	@SqlQuery("select * from word where word = :word")
+	Word getWordByWord(@Bind("word") String word);
+	
 }

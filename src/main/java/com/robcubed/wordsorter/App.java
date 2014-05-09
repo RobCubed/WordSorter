@@ -4,11 +4,16 @@ import org.skife.jdbi.v2.DBI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sun.jersey.api.client.*;
+
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
+import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.dropwizard.views.ViewBundle;
+import io.dropwizard.assets.AssetsBundle;
 
 public class App extends Application<WordSorterConfiguration> {
 	
@@ -16,8 +21,8 @@ public class App extends Application<WordSorterConfiguration> {
 
 	@Override
 	public void initialize(Bootstrap<WordSorterConfiguration> b) {
-		// TODO Auto-generated method stub
-		
+		b.addBundle(new ViewBundle());
+		b.addBundle(new AssetsBundle());
 	}
 
 	@Override
@@ -30,7 +35,12 @@ public class App extends Application<WordSorterConfiguration> {
 		
 		final DBIFactory factory = new DBIFactory();
 		final DBI jdbi = factory.build(e, c.getDataSourceFactory(), "mysql");
+		
 		e.jersey().register(new WordResource(jdbi, e.getValidator()));
+		
+		final Client client = new JerseyClientBuilder(e).build("REST Client");
+		e.jersey().register(new ClientResource(client));		
+		
 	}
 	
 	public static void main(String[] args) throws Exception {
