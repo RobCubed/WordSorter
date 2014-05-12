@@ -33,6 +33,7 @@ public class App extends Application<WordSorterConfiguration> {
 		}
 		System.out.println(c.getAdditionalMessage());
 		
+		
 		final DBIFactory factory = new DBIFactory();
 		final DBI jdbi = factory.build(e, c.getDataSourceFactory(), "mysql");
 		

@@ -7,12 +7,19 @@ import com.robcubed.wordsorter.Word;
 import com.sun.jersey.api.client.*;
 
 @Produces(MediaType.TEXT_HTML)
-@Path("/client")
+@Path("/")
 public class ClientResource {
 	private Client client;
 	
 	public ClientResource(Client client) {
 		this.client = client;
+	}
+	
+	@GET
+	@Path("index")
+	public WordView index() {
+		Word w = new Word();
+		return new WordView(w);
 	}
 	
 	@GET

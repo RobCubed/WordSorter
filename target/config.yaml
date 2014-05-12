@@ -5,8 +5,8 @@ database:
   driverClass: com.mysql.jdbc.Driver
   user: wordlistuser
   password: 123123a
-  #url: jdbc:mysql://192.168.168.5/wordlist #Home
-  url: jdbc:mysql://localhost/wordlist
+  url: jdbc:mysql://192.168.168.5/wordlist #Home
+  #url: jdbc:mysql://localhost/wordlist
   
   
 server:

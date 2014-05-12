@@ -8,7 +8,7 @@ public class WordView extends View {
 	private final Word word;
 	
 	public WordView(Word word) {
-		super("word.mustache");
+		super("word.ftl");
 		this.word = word;
 	}
 	
