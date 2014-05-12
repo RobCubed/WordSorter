@@ -25,6 +25,9 @@ public class WordSorterConfiguration extends Configuration {
 	@JsonProperty
 	private String additionalMessage = "This is optional";
 	
+	@JsonProperty
+	private String saveLocation;
+	
 	public DataSourceFactory getDataSourceFactory() {
 		return database;
 	}
@@ -35,6 +38,10 @@ public class WordSorterConfiguration extends Configuration {
 	
 	public String getMessage() {
 		return message;
+	}
+	
+	public String getSaveLocation() {
+		return saveLocation;
 	}
 	
 	public int getMessageRepetitions() {

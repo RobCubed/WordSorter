@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
-    <link rel="stylesheet" href="http://192.168.168.168:7050/assets/stylesheet.css"/>
+    <title>Rob&sup3; Wordlist Sorter</title>
+    <link rel="stylesheet" href="/assets/stylesheet.css"/>
 </head>
 <body>
 
