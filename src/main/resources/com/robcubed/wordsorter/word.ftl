@@ -29,7 +29,8 @@
             </ul>
         </div>
         <div class="options-right">
-            <div class="more-info"><span class="instructions">Drag file(s) to the gray box above, or 'browse' and select one or more files.</span>
+            <div class="more-info"><span class="instructions">Drag file(s) to the gray box above, or 'browse' and select one or more files.<br/>
+            All tabs and leading/trailing whitespace will be removed. Max line length 255.</span>
 <br/>
 
 

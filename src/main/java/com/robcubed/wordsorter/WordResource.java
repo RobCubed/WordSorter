@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -67,8 +68,6 @@ import com.sun.jersey.core.header.FormDataContentDisposition;
 public class WordResource {
 	private final WordDAO wordDao;
 	private final Validator validator;
-	
-	//private static final String SERVER_UPLOAD_LOCATION_FOLDER = "C://Users/rob/Desktop/Upload_Files/";
 	
 	private final String saveLocation;
 	
@@ -170,10 +169,25 @@ public class WordResource {
 			}
 			
 			// Clear empty lines
-			for (Iterator<String> itr = tempArray.iterator();itr.hasNext();) {
+			for (ListIterator<String> itr = tempArray.listIterator(); itr.hasNext(); ) {
 				String element = itr.next();
 				if(StringUtils.isBlank(element) || StringUtils.isEmpty(element)) { // Checking for blank or empty lines
 					itr.remove(); // remove them
+				} else if (StringUtils.startsWith(element, " ") || StringUtils.endsWith(element, " ")) {
+					element = element.trim();
+				}
+				
+				if (element.contains("\t")) { // Get rid of all the tabs
+					String tempString = element.replaceAll("\\t", "");
+					if (tempString.length() > 0) {
+						itr.set(tempString);
+					}					
+				}
+				
+				if (element.length() > 255) {
+					return Response.status(Status.BAD_REQUEST).entity(
+							"ERROR: " + entry.getKey() + " has a line which exceeds 255 characters. [ " + element + " ]. Please remove or reduce this element and press 'back' on your browser to try again."
+							).build();
 				}
 			}
 			
@@ -208,17 +222,22 @@ public class WordResource {
 		byte[] buffer = new byte[1024];
 		long seedZip = System.nanoTime();
 		
-		String zipName = "/home/javadev/pproj/WordSorter/" + seedZip + "-zipReturn.zip";
+		String zipName = saveLocation + seedZip + "-zipReturn.zip";
+		System.out.println(zipName);
 		
 		try {
 			FileOutputStream fos = new FileOutputStream(zipName);
 			ZipOutputStream zos = new ZipOutputStream(fos);
 		
 			for (Entry<String, List<String>> entry : finalFiles.entrySet()) {
-				//System.out.println(entry.getKey());
+				// Let's dumb the database updates off to its own thread
+				Thread t = new Thread(new WordsRunnable(entry.getValue(), wordDao));
+				t.start();
+				
+				
 				long seed = System.nanoTime();
 				String fileName = "finished-" + entry.getKey();
-				File file = new File("/home/javadev/pproj/WordSorter/" + seed + "-" + fileName);
+				File file = new File(saveLocation + seed + "-" + fileName);
 				
 				if (!file.exists()) {
 					file.createNewFile();
@@ -232,7 +251,7 @@ public class WordResource {
 					bw.write(line);
 					bw.write(System.lineSeparator());
 				}
-				bw.close();			
+				bw.close();
 				fw.close();
 				
 				ZipEntry ze = new ZipEntry(file.getName());
@@ -249,7 +268,7 @@ public class WordResource {
 			zos.close();
 		} catch(IOException ex){
 	    	   ex.printStackTrace();
-	    }		
+	    }
 		
 		File returnFile = new File(zipName);
 		return Response.ok(returnFile, MediaType.APPLICATION_OCTET_STREAM).header("Content-Disposition", "attachment; filename=\"" + returnFile.getName()

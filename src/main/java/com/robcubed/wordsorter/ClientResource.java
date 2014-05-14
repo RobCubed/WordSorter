@@ -16,7 +16,6 @@ public class ClientResource {
 	}
 	
 	@GET
-	@Path("index")
 	public WordView index() {
 		Word w = new Word();
 		return new WordView(w);

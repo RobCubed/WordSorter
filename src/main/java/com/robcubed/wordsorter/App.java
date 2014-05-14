@@ -28,7 +28,6 @@ public class App extends Application<WordSorterConfiguration> {
 	@Override
 	public void run(WordSorterConfiguration c, Environment e) throws Exception {
 		LOGGER.info("Method App#run() called");
-		// System.out.println(c.getAdditionalMessage());
 		System.out.println(c.getSaveLocation());
 		
 		
@@ -40,12 +39,6 @@ public class App extends Application<WordSorterConfiguration> {
 		final Client client = new JerseyClientBuilder(e).build("REST Client");
 		e.jersey().register(new ClientResource(client));		
 		
-		
-		// Start the db word updating thread
-
-	    final WordDAO dao = jdbi.onDemand(WordDAO.class);
-		UpdateWordsRunnable runMe = new UpdateWordsRunnable("Word Updates", dao);
-		runMe.start();		
 	}
 	
 	public static void main(String[] args) throws Exception {
