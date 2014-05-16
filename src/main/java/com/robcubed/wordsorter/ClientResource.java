@@ -1,7 +1,12 @@
 package com.robcubed.wordsorter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+
+import org.skife.jdbi.v2.DBI;
 
 import com.robcubed.wordsorter.Word;
 import com.sun.jersey.api.client.*;
@@ -9,12 +14,15 @@ import com.sun.jersey.api.client.*;
 @Produces(MediaType.TEXT_HTML)
 @Path("/")
 public class ClientResource {
+	private final WordDAO wordDao;
 	private Client client;
 	
-	public ClientResource(Client client) {
+	public ClientResource(Client client, DBI jdbi) {
 		this.client = client;
+		this.wordDao = jdbi.onDemand(WordDAO.class);
 	}
 	
+
 	@GET
 	public WordView index() {
 		Word w = new Word();
@@ -40,5 +48,23 @@ public class ClientResource {
 		} else {
 			return Response.status(422).entity(response.getEntity(String.class)).build();
 		}
+	}
+	
+	@GET
+	@Path("stats")
+	public StatsView statsView() {
+		
+		List<WordResults> topTen = wordDao.getTopTen();		
+		List<WordResults> bottomTen = wordDao.getBottomTen();
+		
+		int totalUnique = wordDao.getWordCount();
+		
+		Stats s = new Stats(topTen, bottomTen, totalUnique);
+		System.out.println(s.getTopTen().toString());
+		System.out.println(s.getBottomTen().toString());
+		System.out.println(s.getTotalUnique());
+
+		Tracking t = wordDao.getTracking();
+		return new StatsView(s, t);
 	}
 }

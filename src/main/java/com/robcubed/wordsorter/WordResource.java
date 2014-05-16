@@ -107,13 +107,16 @@ public class WordResource {
 			@FormDataParam("no_duplicates") String noDuplicates, @FormDataParam("sorting") String sorting) throws IOException {
 		// Use FormDataMultiPart to load multiple fields, even if they have identical names. (Useful for unknown number of files)
 		
-		boolean hasErrors = false;
-		//ArrayList<List<String>> allLines = new ArrayList<>();
+		int totalLines = 0; // all lines submitted
+		int totalFiles = 0; // number of files
+		int maxLines = 0; // highest line count - will update if it beats the old line count!
+		
 		HashMap<String, List<String>> finalFiles = new HashMap<>();
 		HashMap<String, Integer> lineCounts = new HashMap<>();
 		
 		// Process files
 		List<FormDataBodyPart> fields = multiPart.getFields("file"); 
+		totalFiles = fields.size();
 		for (FormDataBodyPart field : fields) {
 			InputStream file = field.getValueAs(InputStream.class); // convert to InputStream for processing
 			ContentDisposition fdcp = field.type(MediaType.TEXT_PLAIN_TYPE).getContentDisposition(); // Grab the file's content disposition
@@ -121,19 +124,17 @@ public class WordResource {
 			IOUtils.copy(file, writer, "UTF-8"); // Apache Commons to read the InputString
 			String fileContents = writer.toString();
 			
-			// TODO: Check to make sure longest line is 512 characters. If it's longer, add filename + line number + error to a map. Set hasErrors to true. 
-			
 			if (!fdcp.getFileName().endsWith("txt")) { // Verify it's a .txt
-				//throw new WebApplicationException();
 				return Response.status(Status.BAD_REQUEST).entity("All files must be in .txt format - " + fdcp.getFileName()).build();
 			}
 			
 			// Let's add all lines to a simple list to start with.
 			String[] lines = fileContents.split(System.getProperty("line.separator"));
+			totalLines = totalLines + lines.length;
+			if (lines.length > maxLines) {
+				maxLines = lines.length;
+			}
 			List<String> linesList = Arrays.asList(lines);			
-			//allLines.add(linesList);
-			//System.out.println(file.toString());
-			//System.out.println(fileContents);
 			lineCounts.put(fdcp.getFileName(), linesList.size());
 			finalFiles.put(fdcp.getFileName(), linesList);
 		}
@@ -212,13 +213,6 @@ public class WordResource {
 
 		
 		
-		/* FOR TESTING
-		System.out.println("All Lines: ");
-		
-		for(String line : allLines) { 
-			System.out.println(line);
-		}*/
-
 		byte[] buffer = new byte[1024];
 		long seedZip = System.nanoTime();
 		
@@ -230,7 +224,7 @@ public class WordResource {
 			ZipOutputStream zos = new ZipOutputStream(fos);
 		
 			for (Entry<String, List<String>> entry : finalFiles.entrySet()) {
-				// Let's dumb the database updates off to its own thread
+				// Let's dump the database updates off to its own thread
 				Thread t = new Thread(new WordsRunnable(entry.getValue(), wordDao));
 				t.start();
 				
@@ -269,6 +263,22 @@ public class WordResource {
 		} catch(IOException ex){
 	    	   ex.printStackTrace();
 	    }
+		
+		// TODO - MAKE THIS THREADSAFE!!!
+		Tracking tracking = wordDao.getTracking();
+		
+		if (maxLines > tracking.getMostLinesSubmitted()) {
+			wordDao.updateMostLines(maxLines);
+		}
+
+		totalLines = totalLines + tracking.getTotalLinesSubmitted();
+		totalFiles = totalFiles + tracking.getTotalFilesSubmitted();
+		int averageLines = totalLines / totalFiles;
+		
+		wordDao.updateAverageLines(averageLines);
+		wordDao.updateTotalFiles(totalFiles);
+		wordDao.updateTotalLines(totalLines);
+		// end TODO
 		
 		File returnFile = new File(zipName);
 		return Response.ok(returnFile, MediaType.APPLICATION_OCTET_STREAM).header("Content-Disposition", "attachment; filename=\"" + returnFile.getName()

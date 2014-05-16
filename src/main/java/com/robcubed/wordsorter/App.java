@@ -37,7 +37,8 @@ public class App extends Application<WordSorterConfiguration> {
 		e.jersey().register(new WordResource(jdbi, e.getValidator(), c.getSaveLocation()));
 		
 		final Client client = new JerseyClientBuilder(e).build("REST Client");
-		e.jersey().register(new ClientResource(client));		
+		e.jersey().register(new ClientResource(client, jdbi));
+		
 		
 	}
 	

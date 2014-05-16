@@ -1,6 +1,5 @@
 package com.robcubed.wordsorter;
 
-import com.robcubed.wordsorter.Word;
 
 import io.dropwizard.views.View;
 
