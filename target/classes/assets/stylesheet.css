@@ -23,6 +23,17 @@ body { background-color:#F3F3F3; }
     text-align: center;
     /*border: 1px solid;*/
 }
+.title-small {
+    text-shadow: 0px 1px 1px #4d4d4d;
+    color: #222;
+    font-size: 25px;
+    font-family: 'Lucida Console', Monaco, monospace;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 10px;
+    text-align: center;
+    /*border: 1px solid;*/
+}
 
 div.dropzone {
     background:lightgray;
@@ -158,3 +169,41 @@ ul {
 .process_button:active {
     background: #F6A953;
 }
+ol.toplist {
+    counter-reset:li; /* Initiate a counter */
+    margin-left:0; /* Remove the default left margin */
+    padding-left:0; /* Remove the default left padding */
+}
+ol.toplist > li {
+    position:relative; /* Create a positioning context */
+    margin:0 0 6px 2em; /* Give each list item a left margin to make room for the numbers */
+    padding:4px 8px; /* Add some spacing around the content */
+    list-style:none; /* Disable the normal item numbering */
+    border-top:2px solid #666;
+    background:#f6f6f6;
+}
+ol.toplist > li:before {
+    content:counter(li); /* Use the counter as content */
+    counter-increment:li; /* Increment the counter by 1 */
+    /* Position and style the number */
+    position:absolute;
+    top:-2px;
+    left:-2em;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    box-sizing:border-box;
+    width:2em;
+    /* Some space between the number and the content in browsers that support
+       generated content but not positioning it (Camino 2 is one example) */
+    margin-right:8px;
+    padding:4px;
+    border-top:2px solid #666;
+    color:#fff;
+    background:#666;
+    font-weight:bold;
+    font-family:"Helvetica Neue", Arial, sans-serif;
+    text-align:center;
+}
+li ol.toplist,
+li ul {margin-top:6px;}
+ol.toplist ol.toplist li:last-child {margin-bottom:0;}

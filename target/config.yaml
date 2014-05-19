@@ -1,8 +1,10 @@
 message: This is a message defined in the configuration file.
 messageRepetitions: 9
 
-#saveLocation: /home/javadev/pproj/WordSorter/Upload
-saveLocation: C:\Users\Rob\Desktop\Upload_Files\
+# Edit your save location (x:\location\subdirectory for Windows, /home/user/location for Linix)
+# saveLocation: /home/javadev/pproj/WordSorter/Upload
+# saveLocation: C:\Users\Rob\Desktop\Upload_Files\
+saveLocation: /home/rob/WordSorter/SaveLocation/
 
 database:
   driverClass: com.mysql.jdbc.Driver

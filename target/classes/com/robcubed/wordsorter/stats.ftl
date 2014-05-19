@@ -1,32 +1,49 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Rob&sup3; Wordlist Sorter Stats</title>
+    <title>Rob&sup3; Wordlist Stats</title>
+    <link rel="stylesheet" href="/assets/stylesheet.css"/>
 </head>
 <body>
 
+<div class="primary">
+    <div class="title">rob&sup3; Wordlist Stats</div>
+    <div class="options">
+Unique lines in database: ${stats.totalUnique?html}<br/>
+Total lines submitted: ${tracking.totalLinesSubmitted?html}<br/>
+Files submitted: ${tracking.totalFilesSubmitted?html}<br/>
+Average lines per file: ${tracking.averageLinesSubmitted?html}<br/>
+Most lines submitted in one file: ${tracking.mostLinesSubmitted?html}<br/>
+</div>
 
-<p>STATS PAGE</p>
 
-<p>The total unique is ${stats.totalUnique?html}</p>
+    <div class="title-small">Most Common Words</div>
 
-<ul>
+    <div class="options">
+<p><ol class="toplist">
   <#list stats.topTen as top>
     <li>${top.word} for ${top.timesUsed}</li>
   </#list>
-</ul>
+</ol>
+</div>
 
-<ul>
+    <div class="title-small">Most Uncommon Words</div>
+
+    <div class="options">
+<ol class="toplist">
   <#list stats.bottomTen as bottom>
     <li>${bottom.word} for ${bottom.timesUsed}</li>
   </#list>
-</ul>
+</ol>
+</p>
 
-${tracking.totalLinesSubmitted?html} - total lines submitted<br/>
-${tracking.totalFilesSubmitted?html} - total files submitted<br/>
-${tracking.averageLinesSubmitted?html} - average lines per file<br/>
-${tracking.mostLinesSubmitted?html} - most lines submitted in one file<br/>
+
+    </div>
+
+
+</div>
+
+
 
 </body>
 </html>
