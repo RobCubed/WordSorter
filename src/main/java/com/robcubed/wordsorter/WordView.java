@@ -3,10 +3,10 @@ package com.robcubed.wordsorter;
 
 import io.dropwizard.views.View;
 
-public class WordView extends View {
+class WordView extends View {
 	private final Word word;
 	
-	public WordView(Word word) {
+	WordView(Word word) {
 		super("word.ftl");
 		this.word = word;
 	}

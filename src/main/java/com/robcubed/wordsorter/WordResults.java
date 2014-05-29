@@ -1,10 +1,10 @@
 package com.robcubed.wordsorter;
 
-public class WordResults {
+class WordResults {
 	private String word;
 	private int timesUsed;
 	
-	public WordResults(String word, int timesUsed) {
+	WordResults(String word, int timesUsed) {
 		this.word = word;
 		this.timesUsed = timesUsed;
 	}

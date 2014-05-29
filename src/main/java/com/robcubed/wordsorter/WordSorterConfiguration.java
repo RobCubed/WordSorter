@@ -10,7 +10,7 @@ import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
 
 
-public class WordSorterConfiguration extends Configuration {
+class WordSorterConfiguration extends Configuration {
 	@JsonProperty
 	private DataSourceFactory database = new DataSourceFactory();
 	

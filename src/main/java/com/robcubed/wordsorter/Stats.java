@@ -2,10 +2,7 @@ package com.robcubed.wordsorter;
 
 import java.util.List;
 
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
-
-public class Stats {
+class Stats {
 	private final int id;
 	
 	private final List<WordResults> topTen;

@@ -1,6 +1,5 @@
 package com.robcubed.wordsorter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.*;
@@ -14,7 +13,7 @@ import com.sun.jersey.api.client.*;
 @Produces(MediaType.TEXT_HTML)
 @Path("/")
 public class ClientResource {
-	private final WordDAO wordDao;
+	final WordDAO wordDao;
 	private Client client;
 	
 	public ClientResource(Client client, DBI jdbi) {

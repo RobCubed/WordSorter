@@ -7,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,40 +15,26 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.sound.sampled.spi.FormatConversionProvider;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.StreamingOutput;
-import javax.ws.rs.ext.MessageBodyReader;
 
-import com.fasterxml.jackson.databind.ser.SerializerCache.TypeKey;
-import com.google.common.io.ByteStreams;
-import com.sun.jersey.multipart.BodyPart;
 import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataMultiPart;
 import com.sun.jersey.multipart.FormDataParam;
@@ -58,9 +43,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.skife.jdbi.v2.DBI;
 
-import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.header.ContentDisposition;
-import com.sun.jersey.core.header.FormDataContentDisposition;
 
 
 @Path("/words")
@@ -71,7 +54,7 @@ public class WordResource {
 	
 	private final String saveLocation;
 	
-	public WordResource(DBI jdbi, Validator validator, String saveLocation) {
+	WordResource(DBI jdbi, Validator validator, String saveLocation) {
 		wordDao = jdbi.onDemand(WordDAO.class);
 		this.validator = validator;
 		this.saveLocation = saveLocation;
@@ -163,7 +146,7 @@ public class WordResource {
 			
 			// Drop it into a hashset to remove any duplicates...
 			if (noDuplicates != null && !noDuplicates.isEmpty()) { 
-				HashSet tempHash = new HashSet(); 
+				HashSet<String> tempHash = new HashSet<String>(); 
 				tempHash.addAll(tempArray);
 				tempArray.clear();
 				tempArray.addAll(tempHash);
@@ -283,23 +266,6 @@ public class WordResource {
 		File returnFile = new File(zipName);
 		return Response.ok(returnFile, MediaType.APPLICATION_OCTET_STREAM).header("Content-Disposition", "attachment; filename=\"" + returnFile.getName()
 				+ "\"" ).build();
-	}
-	
-	private void saveFile(InputStream uploadedInputStream, String serverLocation) {
-		try {
-			OutputStream outputStream = new FileOutputStream(new File(serverLocation));
-			int read = 0;
-			byte[] bytes = new byte[1024];
-			
-			outputStream = new FileOutputStream(new File(serverLocation));
-			while ((read = uploadedInputStream.read(bytes)) != -1) {
-				outputStream.write(bytes, 0, read);
-			}
-			outputStream.flush();
-			outputStream.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	

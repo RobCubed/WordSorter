@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import com.sun.jersey.api.client.*;
 
 import io.dropwizard.Application;
-import io.dropwizard.Configuration;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Bootstrap;
