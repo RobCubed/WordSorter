@@ -1,7 +1,7 @@
 body { background-color:#F3F3F3; }
 .primary {
     position: relative;
-    top: 60px;
+    margin: 60px 60px;
     margin-left: auto;
     margin-right: auto;
     width: 500px;

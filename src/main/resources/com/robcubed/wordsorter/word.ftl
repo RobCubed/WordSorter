@@ -38,7 +38,9 @@
         </div>
         <div class="process"><input type="submit" value="PROCESS" class="process_button"/></div>
         <div><span class="instructions-note">Note: You must drag or select multiple files simultaneously. Dragging one after another will overwrite the previous file(s).</span></div>
+    <div class="title-small"><a href="/stats">WordSorter Stats</a></div>
     </div>
+
 
 </div>
 </form>

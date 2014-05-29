@@ -39,11 +39,10 @@ Most lines submitted in one file: ${tracking.mostLinesSubmitted?html}<br/>
 
 
     </div>
+    <div class="title-small"><a href="/">WordSorter Main</a></div>
 
 
 </div>
-
-
 
 </body>
 </html>
