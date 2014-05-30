@@ -11,15 +11,8 @@ public class WordSorterConfiguration extends Configuration {
 	@JsonProperty
 	private DataSourceFactory database = new DataSourceFactory();
 		
-	@JsonProperty
-	private String saveLocation;
 	
 	public DataSourceFactory getDataSourceFactory() {
 		return database;
 	}
-	
-	public String getSaveLocation() {
-		return saveLocation;
-	}
-	
 }

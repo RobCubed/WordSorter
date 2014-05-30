@@ -1,5 +1,3 @@
-# Edit your save location (x:\location\subdirectory for Windows, /home/user/location for Linix)
-saveLocation: /home/rob/wordSorterTemp/
 
 database:
   driverClass: com.mysql.jdbc.Driver

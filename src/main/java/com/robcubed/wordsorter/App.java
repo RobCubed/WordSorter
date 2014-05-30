@@ -27,13 +27,11 @@ public class App extends Application<WordSorterConfiguration> {
 	@Override
 	public void run(WordSorterConfiguration c, Environment e) throws Exception {
 		LOGGER.info("Method App#run() called");
-		System.out.println(c.getSaveLocation());
-		
 		
 		final DBIFactory factory = new DBIFactory();
 		final DBI jdbi = factory.build(e, c.getDataSourceFactory(), "mysql");
 		
-		e.jersey().register(new WordResource(jdbi, e.getValidator(), c.getSaveLocation()));
+		e.jersey().register(new WordResource(jdbi, e.getValidator()));
 		
 		final Client client = new JerseyClientBuilder(e).build("REST Client");
 		e.jersey().register(new ClientResource(client, jdbi));
