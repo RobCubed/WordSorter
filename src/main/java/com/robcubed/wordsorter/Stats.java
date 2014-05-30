@@ -2,7 +2,7 @@ package com.robcubed.wordsorter;
 
 import java.util.List;
 
-class Stats {
+public class Stats {
 	private final int id;
 	
 	private final List<WordResults> topTen;

@@ -3,7 +3,7 @@ package com.robcubed.wordsorter;
 
 import io.dropwizard.views.View;
 
-class WordView extends View {
+public class WordView extends View {
 	private final Word word;
 	
 	WordView(Word word) {

@@ -3,7 +3,7 @@ package com.robcubed.wordsorter;
 import java.util.List;
 import com.robcubed.wordsorter.WordDAO;
 
-class WordsRunnable implements Runnable {
+public class WordsRunnable implements Runnable {
 	private List<String> words;
 	private WordDAO wordDao;
 	

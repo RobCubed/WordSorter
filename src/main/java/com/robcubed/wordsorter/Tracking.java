@@ -1,6 +1,6 @@
 package com.robcubed.wordsorter;
 
-class Tracking {
+public class Tracking {
 	
 	private int idtracking;
 	private int totalLinesSubmitted;
@@ -8,7 +8,7 @@ class Tracking {
 	private int averageLinesSubmitted;
 	private int mostLinesSubmitted;
 	
-	Tracking(int idtracking, int totalLinesSubmitted, int totalFilesSubmitted, int averageLinesSubmitted, int mostLinesSubmitted) {
+	public Tracking(int idtracking, int totalLinesSubmitted, int totalFilesSubmitted, int averageLinesSubmitted, int mostLinesSubmitted) {
 		this.idtracking = idtracking;
 		this.totalLinesSubmitted = totalLinesSubmitted;
 		this.totalFilesSubmitted = totalFilesSubmitted;

@@ -34,7 +34,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-
 import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataMultiPart;
 import com.sun.jersey.multipart.FormDataParam;
@@ -54,7 +53,7 @@ public class WordResource {
 	
 	private final String saveLocation;
 	
-	WordResource(DBI jdbi, Validator validator, String saveLocation) {
+	public WordResource(DBI jdbi, Validator validator, String saveLocation) {
 		wordDao = jdbi.onDemand(WordDAO.class);
 		this.validator = validator;
 		this.saveLocation = saveLocation;
@@ -146,7 +145,7 @@ public class WordResource {
 			
 			// Drop it into a hashset to remove any duplicates...
 			if (noDuplicates != null && !noDuplicates.isEmpty()) { 
-				HashSet<String> tempHash = new HashSet<String>(); 
+				HashSet tempHash = new HashSet(); 
 				tempHash.addAll(tempArray);
 				tempArray.clear();
 				tempArray.addAll(tempHash);
@@ -267,6 +266,6 @@ public class WordResource {
 		return Response.ok(returnFile, MediaType.APPLICATION_OCTET_STREAM).header("Content-Disposition", "attachment; filename=\"" + returnFile.getName()
 				+ "\"" ).build();
 	}
-	
+		
 	
 }

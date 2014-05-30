@@ -2,7 +2,7 @@ package com.robcubed.wordsorter;
 
 import io.dropwizard.views.View;
 
-class StatsView extends View {
+public class StatsView extends View {
 	private final Stats stats;
 	private final Tracking tracking;
 	

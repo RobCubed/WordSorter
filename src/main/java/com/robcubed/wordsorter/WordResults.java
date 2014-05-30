@@ -1,6 +1,6 @@
 package com.robcubed.wordsorter;
 
-class WordResults {
+public class WordResults {
 	private String word;
 	private int timesUsed;
 	
