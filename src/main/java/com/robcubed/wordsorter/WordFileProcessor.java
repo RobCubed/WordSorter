@@ -24,6 +24,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
 
+import com.robcubed.wfpresource.BAISReturn;
 import com.robcubed.wfpresource.WFPContents;
 import com.sun.jersey.core.header.ContentDisposition;
 import com.sun.jersey.multipart.FormDataBodyPart;
@@ -35,14 +36,17 @@ public class WordFileProcessor {
 	private HashMap<String, List<String>> finalFiles = new HashMap<>();
 	private HashMap<String, Integer> lineCounts = new HashMap<>();
 	private WordDAO wordDao;
+	private BAISReturn br = new BAISReturn();
 	
-	public ByteArrayInputStream processFile(List<FormDataBodyPart> fields, String combineFiles, String noDuplicates, String sorting, WordDAO wordDao) throws IOException {
+	public BAISReturn processFile(List<FormDataBodyPart> fields, String combineFiles, String noDuplicates, String sorting, WordDAO wordDao) throws IOException {
+		
 		this.wordDao = wordDao;
 		
 		totalFiles = fields.size();
 		
 		if (totalFiles < 1) {
-			// TODO : There were no files. Abort.
+			br.setErrorMessage("You must submit at least one file!");
+			return br;
 		}
 		
 		for (FormDataBodyPart field : fields) {
@@ -50,11 +54,11 @@ public class WordFileProcessor {
 			WFPContents fileContents = dataIn(field);
 			
 			if (!fileContents.isTxtFile()) {
-				//  TODO : IT'S NOT A TEXT FILE! ABORT! ABORT!
+				br.setErrorMessage("Please submit files in .txt format only.");
+				return br;
 			} else {
 				// put into lists
 				listCreate(fileContents);
-				// TODO: check for any lines longer than 255...
 			}			
 		}		
 
@@ -82,7 +86,9 @@ public class WordFileProcessor {
 		// make the file to return it		
 		ByteArrayOutputStream baos = this.finalFile();
 		
-		return new ByteArrayInputStream(baos.toByteArray());
+		br.setBais(new ByteArrayInputStream(baos.toByteArray()));
+		
+		return br;
 	}
 	
 	public ByteArrayOutputStream finalFile() {
@@ -176,7 +182,6 @@ public class WordFileProcessor {
 	}
 
 	public void removeDuplicates(Set<Entry<String, List<String>>> entrySet) {
-		// TODO Auto-generated method stub
 
 		for (Entry<String, List<String>> entry : finalFiles.entrySet()) {
 			ArrayList<String> tempArray = new ArrayList<>();
@@ -249,7 +254,6 @@ public class WordFileProcessor {
 		wordDao.updateAverageLines(averageLines);
 		wordDao.updateTotalFiles(totalFiles);
 		wordDao.updateTotalLines(totalLines);
-		// end TODO
 		
 	}
 	

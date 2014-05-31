@@ -1,6 +1,7 @@
 package com.robcubed.wordsorter;
 
-import java.io.ByteArrayInputStream;
+import com.robcubed.wfpresource.BAISReturn;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -66,9 +67,14 @@ public class WordResource {
 			@FormDataParam("no_duplicates") String noDuplicates, @FormDataParam("sorting") String sorting) throws IOException {
 		WordFileProcessor wfp = new WordFileProcessor();
 		
-		ByteArrayInputStream wfpResult = wfp.processFile(multiPart.getFields("file"), combineFiles, noDuplicates, sorting, wordDao);
+		BAISReturn wfpResults = wfp.processFile(multiPart.getFields("file"), combineFiles, noDuplicates, sorting, wordDao);
+		//ByteArrayInputStream wfpResult = wfp.processFile(multiPart.getFields("file"), combineFiles, noDuplicates, sorting, wordDao);
 		
-		return Response.ok(wfpResult, MediaType.APPLICATION_OCTET_STREAM).header("Content-Disposition", "attachment; filename=\"wordlists.zip\"" ).build();
+		if (!wfpResults.getErrorMessage().isEmpty() || !(wfpResults.getErrorMessage() == null)) {
+			return Response.status(Status.BAD_REQUEST).entity(wfpResults.getErrorMessage()).build();
+		} else {
+			return Response.ok(wfpResults.getBais(), MediaType.APPLICATION_OCTET_STREAM).header("Content-Disposition", "attachment; filename=\"wordlists.zip\"" ).build();
+		}		
 	}
 		
 	
